@@ -297,6 +297,12 @@
       transform: translateY(1px) scale(0.99);
     }
 
+    .button:disabled {
+      opacity: 0.68;
+      cursor: wait;
+      transform: none;
+    }
+
     .button.secondary {
       color: var(--deep-green);
       background: rgba(255, 253, 248, 0.58);
@@ -1206,13 +1212,6 @@
       return result.shareText + "\n" + getShareUrl();
     }
 
-    function openExternalUrl(url) {
-      const opened = window.open(url, "_blank", "noopener,noreferrer");
-      if (!opened) {
-        window.location.href = url;
-      }
-    }
-
     async function copyResult() {
       const result = results[currentResultId];
       if (!result) return;
@@ -1240,8 +1239,12 @@
       const shareUrl = new URL("https://twitter.com/intent/tweet");
       shareUrl.searchParams.set("text", result.shareText);
       shareUrl.searchParams.set("url", getShareUrl());
+      xShareButton.disabled = true;
       showToast("Xの投稿画面を開きます");
-      openExternalUrl(shareUrl.href);
+      window.open(shareUrl.href, "_blank", "noopener,noreferrer");
+      window.setTimeout(() => {
+        xShareButton.disabled = false;
+      }, 1200);
     }
 
     async function saveDiagnosisResult() {
