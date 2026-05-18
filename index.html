@@ -717,7 +717,7 @@
       </div>
       <div class="actions result-actions">
         <button class="button warm" type="button" id="xShareButton">Xでシェア</button>
-        <button class="button" type="button" id="instagramButton">Instagramにシェア</button>
+        <button class="button" type="button" id="saveResultButton">診断結果を保存する</button>
         <button class="button secondary" type="button" id="retryButton">もう一度診断する</button>
       </div>
       <p class="note">画像は `assets` フォルダに置くと自動で表示されます。</p>
@@ -977,7 +977,7 @@
     const resultCard = document.getElementById("resultCard");
     const resultInner = document.getElementById("resultInner");
     const xShareButton = document.getElementById("xShareButton");
-    const instagramButton = document.getElementById("instagramButton");
+    const saveResultButton = document.getElementById("saveResultButton");
     const retryButton = document.getElementById("retryButton");
     const toast = document.getElementById("toast");
 
@@ -1244,16 +1244,9 @@
       openExternalUrl(shareUrl.href);
     }
 
-    async function prepareInstagramShare() {
-      const instagramWindow = window.open("about:blank", "_blank", "noopener,noreferrer");
-      await copyResult();
+    async function saveDiagnosisResult() {
       await saveResultImage();
-      showToast("画像と文を準備しました。Instagramに貼れます");
-      if (instagramWindow) {
-        instagramWindow.location.href = "https://www.instagram.com/";
-      } else {
-        window.location.href = "https://www.instagram.com/";
-      }
+      showToast("診断結果の画像を保存しました");
     }
 
     function resetQuiz() {
@@ -1486,7 +1479,7 @@
     });
 
     xShareButton.addEventListener("click", shareToX);
-    instagramButton.addEventListener("click", prepareInstagramShare);
+    saveResultButton.addEventListener("click", saveDiagnosisResult);
     retryButton.addEventListener("click", resetQuiz);
 
     function init() {
