@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="あなたの中の島根っぽさを、出雲神話・島根ゆかりのキャラクターでたとえる性格診断です。">
+  <title>島根神話キャラ診断</title>
+  <style>
+    :root {
+      --paper: #fffaf0;
+      --paper-2: #f5ecd8;
+      --ink: #28362f;
+      --muted: #6c756b;
+      --green: #6fa87d;
+      --deep-green: #3e795b;
+      --blue: #7ea6b8;
+      --red: #d66b48;
+      --ochre: #d5a43f;
+      --sand: #e4cf9b;
+      --white: #fffdf8;
+      --glass: rgba(255, 253, 248, 0.66);
+      --glass-strong: rgba(255, 253, 248, 0.8);
+      --glass-line: rgba(255, 255, 255, 0.68);
+      --shadow: 0 22px 60px rgba(58, 68, 64, 0.16);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(126, 166, 184, 0.38), transparent 28%),
+        radial-gradient(circle at 92% 12%, rgba(214, 107, 72, 0.22), transparent 26%),
+        radial-gradient(circle at 64% 90%, rgba(111, 168, 125, 0.28), transparent 34%),
+        linear-gradient(135deg, #fffdf8 0%, #f8f1df 46%, #eef6f0 100%);
+      letter-spacing: 0;
+      background-attachment: fixed;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      position: relative;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 18px 16px 34px;
+      overflow: hidden;
+    }
+
+    .app::before,
+    .app::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 42vmin;
+      height: 42vmin;
+      opacity: 0.18;
+      clip-path: polygon(50% 0, 100% 32%, 81% 100%, 21% 88%, 0 31%);
+      pointer-events: none;
+    }
+
+    .app::before {
+      top: -11vmin;
+      left: -15vmin;
+      background: var(--green);
+      transform: rotate(17deg);
+    }
+
+    .app::after {
+      right: -16vmin;
+      bottom: 8vmin;
+      background: var(--red);
+      transform: rotate(-12deg);
+    }
+
+    .screen {
+      display: none;
+      animation: rise 360ms ease both;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      min-height: calc(100vh - 52px);
+      display: grid;
+      align-items: center;
+      gap: 22px;
+      padding: 16px 0 18px;
+    }
+
+    .hero-card,
+    .quiz-card,
+    .result-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--glass-line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(255, 253, 248, 0.52)),
+        var(--glass);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px) saturate(1.25);
+      -webkit-backdrop-filter: blur(24px) saturate(1.25);
+    }
+
+    .hero-card {
+      padding: clamp(24px, 5vw, 46px);
+    }
+
+    .hero-card::before,
+    .quiz-card::before,
+    .result-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(132deg, transparent 0 68%, rgba(213, 164, 63, 0.13) 68% 78%, transparent 78%),
+        linear-gradient(24deg, transparent 0 72%, rgba(126, 166, 184, 0.12) 72% 84%, transparent 84%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 42%);
+      pointer-events: none;
+    }
+
+    .hero-inner,
+    .quiz-inner,
+    .result-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      color: var(--deep-green);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      background: var(--red);
+      clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    }
+
+    h1,
+    h2,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(2.25rem, 12vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subcopy {
+      margin-bottom: 14px;
+      font-size: clamp(1.05rem, 4vw, 1.5rem);
+      font-weight: 800;
+      color: #405646;
+    }
+
+    .lead {
+      max-width: 42rem;
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .character-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .mini-character {
+      min-height: 84px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.14)),
+        var(--tone, #e7d7a8);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+        0 12px 24px rgba(40, 54, 47, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .mini-character img {
+      width: 100%;
+      max-width: 82px;
+      aspect-ratio: 1;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 8px rgba(40, 54, 47, 0.12));
+    }
+
+    .mini-fallback,
+    .image-fallback {
+      display: grid;
+      place-items: center;
+      color: #fffdf8;
+      font-weight: 900;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0 28%, transparent 28% 100%),
+        rgba(40, 54, 47, 0.18);
+      clip-path: polygon(50% 0, 92% 21%, 100% 72%, 56% 100%, 7% 83%, 0 29%);
+    }
+
+    .mini-fallback {
+      width: 62px;
+      height: 62px;
+      font-size: 1.35rem;
+    }
+
+    .actions {
+      display: grid;
+      gap: 12px;
+    }
+
+    .result-actions {
+      width: min(100%, 780px);
+      margin: 0 auto;
+      justify-items: stretch;
+    }
+
+    .button {
+      width: 100%;
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 20px;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent),
+        rgba(62, 121, 91, 0.92);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(62, 121, 91, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .result-actions .button {
+      min-height: 62px;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      font-size: clamp(1rem, 3.8vw, 1.16rem);
+      letter-spacing: 0;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(62, 121, 91, 0.27);
+    }
+
+    .button:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .button.secondary {
+      color: var(--deep-green);
+      background: rgba(255, 253, 248, 0.58);
+      box-shadow: inset 0 0 0 1px rgba(62, 121, 91, 0.16);
+    }
+
+    .button.warm {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent),
+        rgba(214, 107, 72, 0.92);
+      box-shadow: 0 12px 26px rgba(214, 107, 72, 0.22);
+    }
+
+    .quiz-card {
+      margin-top: 10px;
+      padding: 18px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .back-button {
+      border: 0;
+      color: var(--deep-green);
+      background: transparent;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .back-button:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .progress {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(234, 223, 198, 0.52);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--ochre), var(--red));
+      box-shadow: 0 0 16px rgba(111, 168, 125, 0.24);
+      transition: width 300ms ease;
+    }
+
+    .question-panel {
+      padding-top: 22px;
+      animation: slideQuestion 260ms ease both;
+    }
+
+    @keyframes slideQuestion {
+      from {
+        opacity: 0;
+        transform: translateX(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-panel h2 {
+      margin-bottom: 20px;
+      font-size: clamp(1.35rem, 6vw, 2rem);
+      line-height: 1.35;
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 68px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 12px;
+      border: 2px solid rgba(62, 121, 91, 0.12);
+      border-radius: 22px;
+      padding: 14px;
+      color: var(--ink);
+      background: rgba(255, 253, 248, 0.64);
+      text-align: left;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 10px 24px rgba(40, 54, 47, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: transform 150ms ease, border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+
+    .choice:hover {
+      border-color: rgba(62, 121, 91, 0.35);
+      background: rgba(248, 255, 243, 0.82);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84), 0 14px 30px rgba(40, 54, 47, 0.09);
+      transform: translateY(-1px);
+    }
+
+    .choice:active {
+      transform: scale(0.985);
+    }
+
+    .choice-letter {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: var(--white);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.22), transparent),
+        var(--red);
+      font-weight: 900;
+    }
+
+    .result-card {
+      margin: 8px auto 18px;
+      padding: 18px;
+      background:
+        linear-gradient(155deg, var(--result-soft), rgba(255, 253, 248, 0.66) 58%),
+        var(--glass);
+    }
+
+    .result-visual {
+      display: grid;
+      place-items: center;
+      min-height: 250px;
+      margin: -2px -2px 16px;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.36) 0 24%, transparent 24%),
+        linear-gradient(220deg, rgba(40, 54, 47, 0.08) 0 28%, transparent 28%),
+        var(--result-tone);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    }
+
+    .result-image {
+      width: min(76vw, 360px);
+      max-height: 360px;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 16px rgba(40, 54, 47, 0.2));
+      animation: floatIn 520ms ease both;
+    }
+
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.94);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .image-fallback {
+      width: min(68vw, 300px);
+      height: min(68vw, 300px);
+      font-size: clamp(4.5rem, 22vw, 7rem);
+      animation: floatIn 520ms ease both;
+    }
+
+    .result-type {
+      display: inline-flex;
+      margin-bottom: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: var(--deep-green);
+      background: rgba(255, 253, 248, 0.58);
+      font-size: 0.86rem;
+      font-weight: 900;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .result-card h2 {
+      margin-bottom: 8px;
+      font-size: clamp(2rem, 9vw, 4rem);
+      line-height: 1.12;
+    }
+
+    .result-title {
+      margin-bottom: 16px;
+      color: var(--red);
+      font-size: 1.05rem;
+      font-weight: 900;
+    }
+
+    .result-section {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255, 253, 248, 0.52);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.54);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .result-section h3 {
+      margin: 0 0 8px;
+      font-size: 0.96rem;
+      color: var(--deep-green);
+    }
+
+    .result-section p {
+      margin-bottom: 0;
+      color: #47574e;
+    }
+
+    .radar-wrap {
+      display: grid;
+      place-items: center;
+      min-width: 280px;
+      padding: 6px 0 2px;
+    }
+
+    .radar-chart {
+      width: min(100%, 380px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .radar-grid {
+      fill: none;
+      stroke: rgba(40, 54, 47, 0.14);
+      stroke-width: 1;
+    }
+
+    .radar-axis {
+      stroke: rgba(40, 54, 47, 0.14);
+      stroke-width: 1;
+    }
+
+    .radar-area {
+      fill: var(--result-tone);
+      fill-opacity: 0.24;
+      stroke: var(--result-tone);
+      stroke-width: 2.2;
+      stroke-linejoin: round;
+    }
+
+    .radar-dot {
+      fill: var(--result-tone);
+      stroke: var(--white);
+      stroke-width: 2;
+    }
+
+    .radar-label {
+      fill: var(--ink);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .radar-value {
+      fill: var(--muted);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .share-text {
+      white-space: pre-line;
+      font-weight: 800;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 20;
+      width: max-content;
+      max-width: calc(100% - 32px);
+      padding: 12px 16px;
+      border-radius: 999px;
+      color: var(--white);
+      background: rgba(40, 54, 47, 0.92);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translate(-50%, 16px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      font-weight: 800;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .note {
+      margin: 14px auto 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    @media (min-width: 760px) {
+      .app {
+        padding-top: 32px;
+      }
+
+      .hero {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+
+      .hero-card {
+        grid-column: 1 / -1;
+      }
+
+      .hero-inner {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .character-strip {
+        grid-template-columns: repeat(4, 1fr);
+        margin: 0;
+      }
+
+      .actions {
+        grid-template-columns: max-content;
+      }
+
+      .result-actions {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .button {
+        width: auto;
+        min-width: 220px;
+      }
+
+      .result-actions .button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .quiz-card,
+      .result-card {
+        padding: 28px;
+      }
+
+      .choices {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .result-card {
+        max-width: 780px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section id="homeScreen" class="screen active" aria-labelledby="appTitle">
+      <div class="hero">
+        <div class="hero-card">
+          <div class="hero-inner">
+            <div>
+              <p class="kicker">出雲神話っぽい、ゆる診断</p>
+              <h1 id="appTitle">島根神話<br>キャラ診断</h1>
+              <p class="subcopy">あなたの中の“島根っぽさ”を、神話キャラでたとえます。</p>
+              <p class="lead">出雲大社、神在月、宍道湖、ゆめタウン、車社会、Uターン。島根で暮らす人ならちょっとわかる質問に答えると、あなたに近い神話キャラがわかります。</p>
+              <div class="actions">
+                <button class="button warm" type="button" id="startButton">診断をはじめる</button>
+              </div>
+            </div>
+            <div class="character-strip" id="characterStrip" aria-label="診断結果のキャラクター一覧"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quizScreen" class="screen" aria-live="polite">
+      <div class="quiz-card">
+        <div class="quiz-inner">
+          <div class="progress-row">
+            <button class="back-button" type="button" id="backButton">← 戻る</button>
+            <span id="questionCounter">1 / 12</span>
+          </div>
+          <div class="progress" aria-hidden="true">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="question-panel" id="questionPanel"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen" aria-live="polite">
+      <div class="result-card" id="resultCard">
+        <div class="result-inner" id="resultInner"></div>
+      </div>
+      <div class="actions result-actions">
+        <button class="button warm" type="button" id="xShareButton">Xでシェア</button>
+        <button class="button" type="button" id="instagramButton">Instagramにシェア</button>
+        <button class="button secondary" type="button" id="retryButton">もう一度診断する</button>
+      </div>
+      <p class="note">画像は `assets` フォルダに置くと自動で表示されます。</p>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const IMAGE_BASE_PATH = "assets/";
+
+    const results = {
+      ookuninushi: {
+        id: "ookuninushi",
+        name: "オオクニヌシ型",
+        initial: "大",
+        title: "島根のやさしい王さま",
+        oneLine: "島根のことを、なんだかんだ一番ちゃんと考えてる人。",
+        relation: "島根が好き。でも「島根最高！」と大声で言うタイプではありません。県外に出ても、地元のニュースをちょっと見てしまう。一回外に出ても、なんだかんだ島根に戻ってくる可能性が高い人です。",
+        image: IMAGE_BASE_PATH + "ookuninushi.png",
+        shareText: "私は「オオクニヌシ型」でした。\n島根のやさしい王さま。\nなんだかんだ、島根のことをちゃんと考えてる人です。\n#島根神話キャラ診断",
+        stats: { orochi: 38, dandan: 72, localLove: 88, kami: 86, en: 74 },
+        tone: "#86b887",
+        soft: "#edf6e9"
+      },
+      susanoo: {
+        id: "susanoo",
+        name: "スサノオ型",
+        initial: "須",
+        title: "島根の暴れんぼうヒーロー",
+        oneLine: "「島根にないなら作ればいい」と思ってしまう人。",
+        relation: "退屈が苦手で、「島根は何もない」と聞くとちょっと燃えます。出ていく可能性もあるけど、戻ってきたら何か始めるタイプ。イベント、店、活動、謎のプロジェクトを立ち上げがちな人です。",
+        image: IMAGE_BASE_PATH + "susanoo.png",
+        shareText: "私は「スサノオ型」でした。\n島根の暴れんぼうヒーロー。\nないなら作る。戻ってきたら、何か始めがちな人です。\n#島根神話キャラ診断",
+        stats: { orochi: 78, dandan: 34, localLove: 66, kami: 82, en: 46 },
+        tone: "#d9704e",
+        soft: "#fff0e8"
+      },
+      kushinadahime: {
+        id: "kushinadahime",
+        name: "クシナダヒメ型",
+        initial: "姫",
+        title: "島根のいやし係",
+        oneLine: "島根の静けさが、ちゃんと体に合ってる人。",
+        relation: "都会に行くと楽しいけど、長くいると少し疲れます。宍道湖の夕日、山の景色、田んぼ道、海沿いの道で回復するタイプ。島根を出ても、静かな場所が恋しくなる人です。",
+        image: IMAGE_BASE_PATH + "kushinadahime.png",
+        shareText: "私は「クシナダヒメ型」でした。\n島根のいやし係。\n都会もいいけど、やっぱり静かな島根で回復する人です。\n#島根神話キャラ診断",
+        stats: { orochi: 28, dandan: 88, localLove: 62, kami: 70, en: 58 },
+        tone: "#8ab6c7",
+        soft: "#eef8fb"
+      },
+      sukunahikona: {
+        id: "sukunahikona",
+        name: "スクナヒコナ型",
+        initial: "少",
+        title: "島根の知恵ぶくろ",
+        oneLine: "不便を工夫でなんとかする、島根の小さな発明家。",
+        relation: "店が少ない、交通が少ない、情報が少ない。でも「じゃあ工夫しよ」と考えます。地元の抜け道、穴場、空いている時間をなぜか知っている、島根生活の攻略上手です。",
+        image: IMAGE_BASE_PATH + "sukunahikona.png",
+        shareText: "私は「スクナヒコナ型」でした。\n島根の知恵ぶくろ。\n不便も工夫でなんとかする、島根生活の攻略上手です。\n#島根神話キャラ診断",
+        stats: { orochi: 36, dandan: 58, localLove: 54, kami: 52, en: 48 },
+        tone: "#d6aa45",
+        soft: "#fff6d9"
+      },
+      kotoshironushi: {
+        id: "kotoshironushi",
+        name: "コトシロヌシ型",
+        initial: "事",
+        title: "島根の聞き上手",
+        oneLine: "人の話を聞きながら、島根でじわじわ信頼される人。",
+        relation: "ぐいぐい前に出るより、ちゃんと話を聞くタイプ。地域の集まり、自治会、PTA、職場、親戚づきあいで力を発揮します。地元にいると、気づいたら相談される側になっている人です。",
+        image: IMAGE_BASE_PATH + "kotoshironushi.png",
+        shareText: "私は「コトシロヌシ型」でした。\n島根の聞き上手。\n前に出すぎないのに、気づいたら相談される人です。\n#島根神話キャラ診断",
+        stats: { orochi: 24, dandan: 86, localLove: 60, kami: 58, en: 78 },
+        tone: "#7da678",
+        soft: "#f0f6e7"
+      },
+      takemikazuchi: {
+        id: "takemikazuchi",
+        name: "タケミカヅチ型",
+        initial: "武",
+        title: "島根の決める人",
+        oneLine: "迷ったら動く。とりあえず車を出す人。",
+        relation: "考えすぎるより、まず行きます。松江から出雲、出雲から大田、浜田まででも、必要なら普通に向かいます。「まあ行けるでしょ」の距離感が、県外の人よりちょっと広い人です。",
+        image: IMAGE_BASE_PATH + "takemikazuchi.png",
+        shareText: "私は「タケミカヅチ型」でした。\n島根の決める人。\n迷ったら動く。とりあえず車を出す人です。\n#島根神話キャラ診断",
+        stats: { orochi: 62, dandan: 30, localLove: 50, kami: 76, en: 38 },
+        tone: "#b88962",
+        soft: "#f7efe5"
+      },
+      kunibiki: {
+        id: "kunibiki",
+        name: "国引きの神型",
+        initial: "国",
+        title: "島根を広げる人",
+        oneLine: "人や場所をつないで、島根をちょっと面白くする人。",
+        relation: "島根の中にある人、場所、活動をつなげるのが得意です。「ここ」と「あそこ」を結んだら面白そう、と思いつきます。小さなイベントや集まりを生み出したり、誰かを誰かに紹介したりするタイプ。気づいたら、島根の楽しみ方を少し広げている人です。「どこ行く？」となったら、最終的にゆめタウン集合になりがちです。",
+        image: IMAGE_BASE_PATH + "kunibiki.png",
+        shareText: "私は「国引きの神型」でした。\n島根を広げる人。\n人や場所をつないで、島根をちょっと面白くする人です。\n#島根神話キャラ診断",
+        stats: { orochi: 52, dandan: 68, localLove: 76, kami: 60, en: 88 },
+        tone: "#70a9a0",
+        soft: "#eaf8f4"
+      },
+      yamata_no_orochi: {
+        id: "yamata_no_orochi",
+        name: "ヤマタノオロチ型",
+        initial: "八",
+        title: "島根ぜんぶ食べたい怪獣",
+        oneLine: "松江も出雲も石見も隠岐も、ぜんぶ気になる人。",
+        relation: "島根が好きすぎて、ひとつに絞れません。出雲が一番と思う日もあれば、松江の景色にやられる日もあります。石見の渋さも気になるし、隠岐にも行きたい。県外の人におすすめを聞かれると、話がどんどん増えます。島根の話が八つに分かれて止まらなくなる、欲ばりでかわいい怪獣です。",
+        image: IMAGE_BASE_PATH + "yamata_no_orochi.png",
+        shareText: "私は「ヤマタノオロチ型」でした。\n島根ぜんぶ食べたい怪獣。\n松江も出雲も石見も隠岐も、ぜんぶ気になる人です。\n#島根神話キャラ診断",
+        stats: { orochi: 90, dandan: 42, localLove: 82, kami: 64, en: 58 },
+        tone: "#b66f98",
+        soft: "#faedf4"
+      }
+    };
+
+    const statLabels = [
+      { key: "orochi", label: "オロチ度" },
+      { key: "dandan", label: "だんだん度" },
+      { key: "localLove", label: "地元愛度" },
+      { key: "kami", label: "神度" },
+      { key: "en", label: "ご縁度" }
+    ];
+
+    const questions = [
+      {
+        question: "県外の人に「島根ってどこ？」と聞かれたら？",
+        choices: [
+          { text: "ちゃんと地図で説明したくなる", scores: { ookuninushi: 2, kotoshironushi: 1 } },
+          { text: "「出雲大社があるところ」とすぐ言う", scores: { ookuninushi: 2, kushinadahime: 1 } },
+          { text: "「鳥取のとなり」とわかりやすく言う", scores: { kotoshironushi: 2, sukunahikona: 1 } },
+          { text: "怒る", scores: { susanoo: 2, yamata_no_orochi: 1 } }
+        ]
+      },
+      {
+        question: "「島根は何もない」と言われたら？",
+        choices: [
+          { text: "まあ、静かでいいところだよと思う", scores: { kushinadahime: 2, kotoshironushi: 1 } },
+          { text: "ないなら作ればいいと思う", scores: { susanoo: 2, kunibiki: 1 } },
+          { text: "何もないようで、けっこうあると説明したくなる", scores: { ookuninushi: 2, yamata_no_orochi: 1 } },
+          { text: "怒る", scores: { susanoo: 2, takemikazuchi: 1 } }
+        ]
+      },
+      {
+        question: "島根を出て暮らすことになったら？",
+        choices: [
+          { text: "ウキウキで島根のこと忘れる", scores: { susanoo: 1, takemikazuchi: 2 } },
+          { text: "寂しいけど頑張る、心は島根でいっぱい", scores: { kushinadahime: 2, ookuninushi: 1 } },
+          { text: "島根に帰ることを見据えて計画的に暮らす", scores: { ookuninushi: 2, sukunahikona: 1 } },
+          { text: "そもそも出て行かない。", scores: { ookuninushi: 2, kotoshironushi: 1 } }
+        ]
+      },
+      {
+        question: "島根あるあるで、一番うなずくのは？",
+        choices: [
+          { text: "神在月だけ、ちょっと胸を張りたくなる", scores: { ookuninushi: 2, kushinadahime: 1 } },
+          { text: "知り合いの知り合いが、だいたい知り合い", scores: { kotoshironushi: 2, kunibiki: 1 } },
+          { text: "遠くても「まあ車なら行ける」と言いがち", scores: { takemikazuchi: 2, susanoo: 1 } },
+          { text: "東西に長すぎて、端の方は行ったことない", scores: { yamata_no_orochi: 2, sukunahikona: 1 } }
+        ]
+      },
+      {
+        question: "島根といえば？",
+        choices: [
+          { text: "出雲大社", scores: { ookuninushi: 2, kushinadahime: 1 } },
+          { text: "石見銀山", scores: { sukunahikona: 2, kotoshironushi: 1 } },
+          { text: "しじみ", scores: { kushinadahime: 1, yamata_no_orochi: 2 } },
+          { text: "出雲そば", scores: { yamata_no_orochi: 2, ookuninushi: 1 } }
+        ]
+      },
+      {
+        question: "島根の好きなところを聞かれたら？",
+        choices: [
+          { text: "静かで落ち着くところ", scores: { kushinadahime: 2, kotoshironushi: 1 } },
+          { text: "人との距離が近いところ", scores: { kotoshironushi: 2, kunibiki: 1 } },
+          { text: "神話や歴史があるところ", scores: { ookuninushi: 2, sukunahikona: 1 } },
+          { text: "ひとことで言えない。いろいろある", scores: { yamata_no_orochi: 2, ookuninushi: 1 } }
+        ]
+      },
+      {
+        question: "島根のニュースで気になるのは？",
+        choices: [
+          { text: "新しいお店ができたニュース", scores: { yamata_no_orochi: 1, takemikazuchi: 2 } },
+          { text: "人口が減ったとか、学校がなくなるニュース", scores: { ookuninushi: 2, kotoshironushi: 1 } },
+          { text: "地元のイベントやお祭りのニュース", scores: { kunibiki: 2, susanoo: 1 } },
+          { text: "県外で島根が紹介されたニュース", scores: { yamata_no_orochi: 2, ookuninushi: 1 } }
+        ]
+      },
+      {
+        question: "島根に足りないと思うものは？",
+        choices: [
+          { text: "若い人が集まる場所", scores: { kunibiki: 2, ookuninushi: 1 } },
+          { text: "新しいことに挑戦する空気", scores: { susanoo: 2, kunibiki: 1 } },
+          { text: "便利な交通", scores: { takemikazuchi: 2, sukunahikona: 1 } },
+          { text: "特にない", scores: { kushinadahime: 2, kotoshironushi: 1 } }
+        ]
+      },
+      {
+        question: "島根で「これはもったいない」と思うのは？",
+        choices: [
+          { text: "面白い人が知られていないこと", scores: { kunibiki: 2, susanoo: 1 } },
+          { text: "いい場所が知られていないこと", scores: { yamata_no_orochi: 2, ookuninushi: 1 } },
+          { text: "若い人が出ていくこと", scores: { ookuninushi: 2, kunibiki: 1 } },
+          { text: "県民が島根を低く見がちなこと", scores: { susanoo: 1, ookuninushi: 2 } }
+        ]
+      },
+      {
+        question: "島根で一番こわいものは？",
+        choices: [
+          { text: "何かするとすぐバレる", scores: { kotoshironushi: 2, kunibiki: 1 } },
+          { text: "目的地まで「近いよ」と言われてからの40分", scores: { takemikazuchi: 2, sukunahikona: 1 } },
+          { text: "県外の人の「鳥取だっけ？」", scores: { susanoo: 2, ookuninushi: 1 } },
+          { text: "ほんとに何もなかったりする", scores: { kushinadahime: 2, kotoshironushi: 1 } }
+        ]
+      },
+      {
+        question: "島根県民として、つい言いがちな一言は？",
+        choices: [
+          { text: "「まあ、なんもないけどね」", scores: { kushinadahime: 2, kotoshironushi: 1 } },
+          { text: "「車ならすぐだよ」", scores: { takemikazuchi: 2, susanoo: 1 } },
+          { text: "「それ、知り合いの知り合いかも」", scores: { kotoshironushi: 2, kunibiki: 1 } },
+          { text: "「出雲大社は行っといた方がいい」", scores: { ookuninushi: 2, yamata_no_orochi: 1 } }
+        ]
+      },
+      {
+        question: "島根で「都会だな」と思う瞬間は？",
+        choices: [
+          { text: "駐車場が広い店に人が多い", scores: { sukunahikona: 2, takemikazuchi: 1 } },
+          { text: "新しいカフェができた", scores: { susanoo: 2, yamata_no_orochi: 1 } },
+          { text: "夜でも明るい通りを見た", scores: { kushinadahime: 2, kotoshironushi: 1 } },
+          { text: "イオンに来た", scores: { yamata_no_orochi: 2, kunibiki: 1 } }
+        ]
+      }
+    ];
+
+    const tieBreakOrder = [
+      "yamata_no_orochi",
+      "kunibiki",
+      "susanoo",
+      "ookuninushi",
+      "kushinadahime",
+      "sukunahikona",
+      "kotoshironushi",
+      "takemikazuchi"
+    ];
+
+    const homeScreen = document.getElementById("homeScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+    const characterStrip = document.getElementById("characterStrip");
+    const startButton = document.getElementById("startButton");
+    const backButton = document.getElementById("backButton");
+    const questionCounter = document.getElementById("questionCounter");
+    const progressBar = document.getElementById("progressBar");
+    const questionPanel = document.getElementById("questionPanel");
+    const resultCard = document.getElementById("resultCard");
+    const resultInner = document.getElementById("resultInner");
+    const xShareButton = document.getElementById("xShareButton");
+    const instagramButton = document.getElementById("instagramButton");
+    const retryButton = document.getElementById("retryButton");
+    const toast = document.getElementById("toast");
+
+    let currentIndex = 0;
+    let answers = [];
+    let currentResultId = null;
+
+    const safeStorage = {
+      get(key) {
+        try {
+          return window.localStorage.getItem(key);
+        } catch (error) {
+          return null;
+        }
+      },
+      set(key, value) {
+        try {
+          window.localStorage.setItem(key, value);
+        } catch (error) {
+          // file:// で直接開く環境では保存できないことがあります。
+        }
+      },
+      remove(key) {
+        try {
+          window.localStorage.removeItem(key);
+        } catch (error) {
+          // 保存が使えない環境では何もしません。
+        }
+      }
+    };
+
+    function showScreen(screen) {
+      [homeScreen, quizScreen, resultScreen].forEach((item) => item.classList.remove("active"));
+      screen.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function renderImageOrFallback(container, result, className) {
+      const img = document.createElement("img");
+      img.src = result.image;
+      img.alt = result.name;
+      img.className = className;
+      img.onerror = () => {
+        const fallback = document.createElement("div");
+        fallback.className = className === "result-image" ? "image-fallback" : "mini-fallback";
+        fallback.textContent = result.initial;
+        img.replaceWith(fallback);
+      };
+      container.appendChild(img);
+    }
+
+    function renderCharacterStrip() {
+      characterStrip.innerHTML = "";
+      Object.values(results).forEach((result) => {
+        const item = document.createElement("div");
+        item.className = "mini-character";
+        item.style.setProperty("--tone", result.soft);
+        item.title = result.name;
+        renderImageOrFallback(item, result, "mini-img");
+        characterStrip.appendChild(item);
+      });
+    }
+
+    function renderQuestion() {
+      const item = questions[currentIndex];
+      questionCounter.textContent = `${currentIndex + 1} / ${questions.length}`;
+      progressBar.style.width = `${(currentIndex / questions.length) * 100}%`;
+      backButton.disabled = currentIndex === 0;
+      questionPanel.style.animation = "none";
+      questionPanel.offsetHeight;
+      questionPanel.style.animation = "";
+      questionPanel.innerHTML = `
+        <h2>${escapeHtml(item.question)}</h2>
+        <div class="choices">
+          ${item.choices.map((choice, index) => `
+            <button class="choice" type="button" data-choice="${index}">
+              <span class="choice-letter">${String.fromCharCode(65 + index)}</span>
+              <span>${escapeHtml(choice.text)}</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function chooseAnswer(choiceIndex) {
+      answers[currentIndex] = choiceIndex;
+      safeStorage.set("shimaneMythAnswers", JSON.stringify(answers));
+      if (currentIndex < questions.length - 1) {
+        currentIndex += 1;
+        renderQuestion();
+        return;
+      }
+      progressBar.style.width = "100%";
+      const resultId = calculateResult();
+      showResult(resultId);
+    }
+
+    function calculateResult() {
+      const scores = Object.fromEntries(Object.keys(results).map((key) => [key, 0]));
+      answers.forEach((choiceIndex, questionIndex) => {
+        const choice = questions[questionIndex].choices[choiceIndex];
+        if (!choice) return;
+        Object.entries(choice.scores).forEach(([key, value]) => {
+          scores[key] += value;
+        });
+      });
+      let topScore = Math.max(...Object.values(scores));
+      const tiedIds = Object.keys(scores).filter((key) => scores[key] === topScore);
+      return tieBreakOrder.find((key) => tiedIds.includes(key));
+    }
+
+    function showResult(resultId) {
+      const result = results[resultId] || results.yamata_no_orochi;
+      currentResultId = result.id;
+      safeStorage.set("shimaneMythResult", result.id);
+      const url = new URL(window.location.href);
+      url.searchParams.set("type", result.id);
+      window.history.replaceState({}, "", url);
+      renderResult(result);
+      showScreen(resultScreen);
+    }
+
+    function polarPoint(center, radius, index, total) {
+      const angle = -Math.PI / 2 + (Math.PI * 2 * index) / total;
+      return {
+        x: center + Math.cos(angle) * radius,
+        y: center + Math.sin(angle) * radius
+      };
+    }
+
+    function pointsToString(points) {
+      return points.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+    }
+
+    function renderRadarChart(stats) {
+      const size = 320;
+      const center = 160;
+      const radius = 102;
+      const total = statLabels.length;
+      const gridLevels = [20, 40, 60, 80, 100];
+      const grid = gridLevels.map((level) => {
+        const points = statLabels.map((_, index) => polarPoint(center, radius * (level / 100), index, total));
+        return `<polygon class="radar-grid" points="${pointsToString(points)}"></polygon>`;
+      }).join("");
+      const axes = statLabels.map((_, index) => {
+        const end = polarPoint(center, radius, index, total);
+        return `<line class="radar-axis" x1="${center}" y1="${center}" x2="${end.x.toFixed(1)}" y2="${end.y.toFixed(1)}"></line>`;
+      }).join("");
+      const valuePoints = statLabels.map(({ key }, index) => {
+        const value = Math.max(0, Math.min(100, Number(stats[key]) || 0));
+        return polarPoint(center, radius * (value / 100), index, total);
+      });
+      const dots = valuePoints.map((point) => `<circle class="radar-dot" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"></circle>`).join("");
+      const labels = statLabels.map(({ key, label }, index) => {
+        const labelPoint = polarPoint(center, radius + 38, index, total);
+        const anchor = Math.abs(labelPoint.x - center) < 6 ? "middle" : labelPoint.x > center ? "start" : "end";
+        const value = Math.max(0, Math.min(100, Number(stats[key]) || 0));
+        return `
+          <text class="radar-label" x="${labelPoint.x.toFixed(1)}" y="${labelPoint.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle">${escapeHtml(label)}</text>
+          <text class="radar-value" x="${labelPoint.x.toFixed(1)}" y="${(labelPoint.y + 15).toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle">${value}</text>
+        `;
+      }).join("");
+
+      return `
+        <div class="radar-wrap">
+          <svg class="radar-chart" viewBox="0 0 ${size} ${size}" role="img" aria-label="島根成分のレーダーチャート">
+            ${grid}
+            ${axes}
+            <polygon class="radar-area" points="${pointsToString(valuePoints)}"></polygon>
+            ${dots}
+            ${labels}
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderResult(result) {
+      resultCard.style.setProperty("--result-tone", result.tone);
+      resultCard.style.setProperty("--result-soft", result.soft);
+      resultInner.innerHTML = "";
+
+      const visual = document.createElement("div");
+      visual.className = "result-visual";
+      renderImageOrFallback(visual, result, "result-image");
+
+      const content = document.createElement("div");
+      content.innerHTML = `
+        <span class="result-type">あなたは</span>
+        <h2>${escapeHtml(result.name)}</h2>
+        <p class="result-title">${escapeHtml(result.title)}</p>
+        <section class="result-section">
+          <h3>一言で言うと</h3>
+          <p>${escapeHtml(result.oneLine)}</p>
+        </section>
+        <section class="result-section">
+          <h3>島根との関係</h3>
+          <p>${escapeHtml(result.relation)}</p>
+        </section>
+        <section class="result-section">
+          <h3>島根成分グラフ</h3>
+          ${renderRadarChart(result.stats)}
+        </section>
+        <section class="result-section">
+          <h3>SNSシェア用テキスト</h3>
+          <p class="share-text">${escapeHtml(result.shareText)}</p>
+        </section>
+      `;
+
+      resultInner.append(visual, content);
+    }
+
+    function getShareUrl() {
+      const url = new URL(window.location.href);
+      if (currentResultId) url.searchParams.set("type", currentResultId);
+      return url.href;
+    }
+
+    function getShareText(result) {
+      return result.shareText + "\n" + getShareUrl();
+    }
+
+    function openExternalUrl(url) {
+      const opened = window.open(url, "_blank", "noopener,noreferrer");
+      if (!opened) {
+        window.location.href = url;
+      }
+    }
+
+    async function copyResult() {
+      const result = results[currentResultId];
+      if (!result) return;
+      const text = getShareText(result);
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast("結果をコピーしました");
+      } catch (error) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        const copied = document.execCommand("copy");
+        textarea.remove();
+        showToast(copied ? "結果をコピーしました" : "コピーできませんでした。長押しで選んでください");
+      }
+    }
+
+    function shareToX() {
+      const result = results[currentResultId];
+      if (!result) return;
+      const shareUrl = new URL("https://twitter.com/intent/tweet");
+      shareUrl.searchParams.set("text", result.shareText);
+      shareUrl.searchParams.set("url", getShareUrl());
+      showToast("Xの投稿画面を開きます");
+      openExternalUrl(shareUrl.href);
+    }
+
+    async function prepareInstagramShare() {
+      const instagramWindow = window.open("about:blank", "_blank", "noopener,noreferrer");
+      await copyResult();
+      await saveResultImage();
+      showToast("画像と文を準備しました。Instagramに貼れます");
+      if (instagramWindow) {
+        instagramWindow.location.href = "https://www.instagram.com/";
+      } else {
+        window.location.href = "https://www.instagram.com/";
+      }
+    }
+
+    function resetQuiz() {
+      answers = [];
+      currentIndex = 0;
+      currentResultId = null;
+      safeStorage.remove("shimaneMythAnswers");
+      safeStorage.remove("shimaneMythResult");
+      const url = new URL(window.location.href);
+      url.searchParams.delete("type");
+      window.history.replaceState({}, "", url);
+      renderQuestion();
+      showScreen(homeScreen);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+      const chars = Array.from(text);
+      let line = "";
+      let lines = [];
+      chars.forEach((char) => {
+        const testLine = line + char;
+        if (ctx.measureText(testLine).width > maxWidth && line) {
+          lines.push(line);
+          line = char;
+        } else {
+          line = testLine;
+        }
+      });
+      if (line) lines.push(line);
+      if (maxLines && lines.length > maxLines) {
+        lines = lines.slice(0, maxLines);
+        lines[lines.length - 1] = lines[lines.length - 1].replace(/。?$/, "…");
+      }
+      lines.forEach((item, index) => ctx.fillText(item, x, y + index * lineHeight));
+      return y + lines.length * lineHeight;
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.onload = () => resolve(image);
+        image.onerror = () => resolve(null);
+        image.src = src;
+      });
+    }
+
+    function drawCanvasRadar(ctx, stats, x, y, radius, tone) {
+      const total = statLabels.length;
+      const centerX = x;
+      const centerY = y;
+      const pointAt = (index, valueRadius) => {
+        const angle = -Math.PI / 2 + (Math.PI * 2 * index) / total;
+        return {
+          x: centerX + Math.cos(angle) * valueRadius,
+          y: centerY + Math.sin(angle) * valueRadius
+        };
+      };
+      ctx.save();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(40,54,47,0.18)";
+      [0.2, 0.4, 0.6, 0.8, 1].forEach((scale) => {
+        ctx.beginPath();
+        statLabels.forEach((_, index) => {
+          const point = pointAt(index, radius * scale);
+          if (index === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
+        });
+        ctx.closePath();
+        ctx.stroke();
+      });
+      statLabels.forEach((_, index) => {
+        const point = pointAt(index, radius);
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
+      });
+
+      const valuePoints = statLabels.map(({ key }, index) => {
+        const value = Math.max(0, Math.min(100, Number(stats[key]) || 0));
+        return pointAt(index, radius * (value / 100));
+      });
+      ctx.beginPath();
+      valuePoints.forEach((point, index) => {
+        if (index === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+      ctx.closePath();
+      ctx.globalAlpha = 0.24;
+      ctx.fillStyle = tone;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = tone;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.fillStyle = "#28362f";
+      ctx.font = "900 20px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      statLabels.forEach(({ key, label }, index) => {
+        const labelPoint = pointAt(index, radius + 42);
+        const value = Math.max(0, Math.min(100, Number(stats[key]) || 0));
+        ctx.fillText(label, labelPoint.x, labelPoint.y);
+        ctx.fillStyle = "#6c756b";
+        ctx.font = "800 17px system-ui, sans-serif";
+        ctx.fillText(String(value), labelPoint.x, labelPoint.y + 24);
+        ctx.fillStyle = "#28362f";
+        ctx.font = "900 20px system-ui, sans-serif";
+      });
+      ctx.restore();
+    }
+
+    async function saveResultImage() {
+      const result = results[currentResultId];
+      if (!result) return;
+      const canvas = document.createElement("canvas");
+      const scale = 2;
+      const width = 720;
+      const height = 1360;
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.scale(scale, scale);
+
+      ctx.fillStyle = result.soft;
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = result.tone;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(width, 0);
+      ctx.lineTo(width, 330);
+      ctx.lineTo(0, 430);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.28)";
+      ctx.beginPath();
+      ctx.moveTo(72, 62);
+      ctx.lineTo(270, 96);
+      ctx.lineTo(210, 246);
+      ctx.lineTo(36, 204);
+      ctx.closePath();
+      ctx.fill();
+
+      const image = await loadImage(result.image);
+      if (image) {
+        const box = 330;
+        const ratio = Math.min(box / image.width, box / image.height);
+        const drawWidth = image.width * ratio;
+        const drawHeight = image.height * ratio;
+        ctx.drawImage(image, (width - drawWidth) / 2, 86 + (box - drawHeight) / 2, drawWidth, drawHeight);
+      } else {
+        ctx.fillStyle = "rgba(255,255,255,0.28)";
+        ctx.beginPath();
+        ctx.moveTo(width / 2, 74);
+        ctx.lineTo(538, 154);
+        ctx.lineTo(580, 312);
+        ctx.lineTo(384, 410);
+        ctx.lineTo(164, 338);
+        ctx.lineTo(134, 162);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#fffdf8";
+        ctx.font = "900 148px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(result.initial, width / 2, 292);
+      }
+
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#fffdf8";
+      ctx.font = "900 30px system-ui, sans-serif";
+      ctx.fillText("島根神話キャラ診断", 52, 56);
+
+      ctx.fillStyle = "#fffdf8";
+      ctx.font = "900 44px system-ui, sans-serif";
+      ctx.fillText("あなたは", 52, 482);
+      ctx.font = "900 62px system-ui, sans-serif";
+      drawWrappedText(ctx, result.name, 52, 552, 616, 72, 2);
+
+      ctx.fillStyle = "#d66b48";
+      ctx.font = "900 32px system-ui, sans-serif";
+      drawWrappedText(ctx, result.title, 52, 690, 616, 42, 2);
+
+      ctx.fillStyle = "#28362f";
+      ctx.font = "800 28px system-ui, sans-serif";
+      drawWrappedText(ctx, result.oneLine, 52, 770, 616, 42, 3);
+
+      ctx.fillStyle = "#3e795b";
+      ctx.font = "900 26px system-ui, sans-serif";
+      ctx.fillText("島根成分グラフ", 52, 928);
+      drawCanvasRadar(ctx, result.stats, width / 2, 1080, 96, result.tone);
+
+      ctx.fillStyle = "#3e795b";
+      ctx.font = "900 24px system-ui, sans-serif";
+      ctx.fillText("#島根神話キャラ診断", 52, 1300);
+
+      const link = document.createElement("a");
+      link.download = `${result.id}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      showToast("結果カード画像を作りました");
+    }
+
+    startButton.addEventListener("click", () => {
+      currentIndex = 0;
+      answers = [];
+      renderQuestion();
+      showScreen(quizScreen);
+    });
+
+    backButton.addEventListener("click", () => {
+      if (currentIndex === 0) return;
+      currentIndex -= 1;
+      renderQuestion();
+    });
+
+    questionPanel.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-choice]");
+      if (!button) return;
+      chooseAnswer(Number(button.dataset.choice));
+    });
+
+    xShareButton.addEventListener("click", shareToX);
+    instagramButton.addEventListener("click", prepareInstagramShare);
+    retryButton.addEventListener("click", resetQuiz);
+
+    function init() {
+      renderCharacterStrip();
+      const params = new URLSearchParams(window.location.search);
+      const resultId = params.get("type") || safeStorage.get("shimaneMythResult");
+      if (resultId && results[resultId]) {
+        showResult(resultId);
+        return;
+      }
+      renderQuestion();
+    }
+
+    init();
+  </script>
+</body>
+</html>
